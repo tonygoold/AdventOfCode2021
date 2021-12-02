@@ -2,4 +2,5 @@
 members = [
   "app",
   "day01",
+  "day02",
 ]
