@@ -1,0 +1,8 @@
+[package]
+name = "day04"
+version = "0.1.0"
+authors = ["R. Tony Goold <tony@goold.net>"]
+edition = "2021"
+
+[dependencies]
+app = { path = "../app" }
