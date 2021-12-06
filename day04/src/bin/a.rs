@@ -7,26 +7,26 @@ struct BingoCard {
 
 impl BingoCard {
     fn new() -> BingoCard {
-        BingoCard{
+        BingoCard {
             cells: [0; 25],
             called: [false; 25],
         }
     }
 
     fn get(&self, x: usize, y: usize) -> u8 {
-        self.cells[5*y + x]
+        self.cells[5 * y + x]
     }
 
     fn set(&mut self, x: usize, y: usize, val: u8) {
-        self.cells[5*y + x] = val;
+        self.cells[5 * y + x] = val;
     }
 
     fn is_marked(&self, x: usize, y: usize) -> bool {
-        self.called[5*y + x]
+        self.called[5 * y + x]
     }
 
     fn mark(&mut self, x: usize, y: usize) {
-        self.called[5*y + x] = true;
+        self.called[5 * y + x] = true;
     }
 
     fn mark_value(&mut self, val: u8) -> bool {
@@ -104,7 +104,11 @@ fn main() {
     for &x in input.iter() {
         for card in cards.iter_mut() {
             if card.mark_value(x) && card.wins() {
-                println!("Winning card on input {:?} has score {:?}", x, card.score(x));
+                println!(
+                    "Winning card on input {:?} has score {:?}",
+                    x,
+                    card.score(x)
+                );
                 return;
             }
         }

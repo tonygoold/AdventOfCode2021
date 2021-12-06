@@ -45,13 +45,14 @@ impl FromStr for Point {
     type Err = ParsePointError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let mut ns = s.split(',')
+        let mut ns = s
+            .split(',')
             .map(|n| n.parse::<isize>().map_err(|e| Self::Err::BadCoord(e)));
         let x = ns.next().unwrap_or(Err(Self::Err::WrongDimensions(0)))?;
         let y = ns.next().unwrap_or(Err(Self::Err::WrongDimensions(1)))?;
         match ns.count() {
-            0 => Ok(Point{x, y}),
-            n => Err(Self::Err::WrongDimensions(n+2)),
+            0 => Ok(Point { x, y }),
+            n => Err(Self::Err::WrongDimensions(n + 2)),
         }
     }
 }
@@ -96,15 +97,15 @@ impl FromStr for Segment {
         let p1 = ps.next().unwrap_or(Err(Self::Err::WrongNumPoints(0)))?;
         let p2 = ps.next().unwrap_or(Err(Self::Err::WrongNumPoints(1)))?;
         match ps.count() {
-            0 => Ok(Segment{p1, p2}),
-            n => Err(Self::Err::WrongNumPoints(n+2)),
+            0 => Ok(Segment { p1, p2 }),
+            n => Err(Self::Err::WrongNumPoints(n + 2)),
         }
     }
 }
 
 impl Grid {
     fn new(lines: Vec<Segment>) -> Grid {
-        Grid{lines}
+        Grid { lines }
     }
 
     fn num_lines(&self) -> usize {
@@ -113,9 +114,7 @@ impl Grid {
 
     fn coverage(&self) -> HashMap<Point, usize> {
         let mut map = HashMap::new();
-        let ps = self.lines.iter()
-            .map(|l| l.points().into_iter())
-            .flatten();
+        let ps = self.lines.iter().map(|l| l.points().into_iter()).flatten();
         for p in ps {
             let count = map.entry(p).or_default();
             *count += 1;

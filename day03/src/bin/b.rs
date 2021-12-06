@@ -2,7 +2,7 @@ use app;
 
 // Returns (num_zeros, num_ones)
 fn col_bits<S: AsRef<str>>(rows: impl Iterator<Item = S>, col: usize) -> (usize, usize) {
-    rows.fold((0, 0), |acc@(zeros, ones), row| {
+    rows.fold((0, 0), |acc @ (zeros, ones), row| {
         let c = row.as_ref().chars().nth(col).unwrap();
         match c {
             '0' => (zeros + 1, ones),
@@ -55,5 +55,10 @@ fn main() {
     let o2 = o2_rating(rows.iter(), 0);
     let co2 = co2_rating(rows.iter(), 0);
 
-    println!("The product of O2 {:?} and Co2 {:?} is {:?}", o2, co2, o2 * co2);
+    println!(
+        "The product of O2 {:?} and Co2 {:?} is {:?}",
+        o2,
+        co2,
+        o2 * co2
+    );
 }

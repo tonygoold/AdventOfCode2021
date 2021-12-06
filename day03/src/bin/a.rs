@@ -2,7 +2,7 @@ use app;
 
 // Returns (num_zeros, num_ones)
 fn col_bits<S: AsRef<str>>(rows: impl Iterator<Item = S>, col: usize) -> (usize, usize) {
-    rows.fold((0, 0), |acc@(zeros, ones), row| {
+    rows.fold((0, 0), |acc @ (zeros, ones), row| {
         let c = row.as_ref().chars().nth(col).unwrap();
         match c {
             '0' => (zeros + 1, ones),
@@ -31,5 +31,10 @@ fn main() {
         }
     }
 
-    println!("The product of gamma {:?} and epsilon {:?} is {:?}", gamma, epsilon, gamma * epsilon);
+    println!(
+        "The product of gamma {:?} and epsilon {:?} is {:?}",
+        gamma,
+        epsilon,
+        gamma * epsilon
+    );
 }

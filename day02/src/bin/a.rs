@@ -8,7 +8,7 @@ enum Move {
     Up(isize),
 }
 
-use Move::{Forward,Down,Up};
+use Move::{Down, Forward, Up};
 
 fn parse_move(dir: &str, val: &str) -> Option<Move> {
     match isize::from_str_radix(val, 10) {
@@ -17,8 +17,8 @@ fn parse_move(dir: &str, val: &str) -> Option<Move> {
             "forward" => Some(Forward(xy)),
             "down" => Some(Down(xy)),
             "up" => Some(Up(xy)),
-            _ => None
-        }
+            _ => None,
+        },
     }
 }
 
@@ -54,5 +54,10 @@ fn main() {
         pos.apply(mv);
     }
 
-    println!("The product of length {:?} and depth {:?} is {:?}", pos.x, pos.y, pos.x * pos.y);
+    println!(
+        "The product of length {:?} and depth {:?} is {:?}",
+        pos.x,
+        pos.y,
+        pos.x * pos.y
+    );
 }
