@@ -6,6 +6,10 @@ pub fn input_arg() -> String {
     env::args().skip(1).next().unwrap_or("input.txt".to_string())
 }
 
+pub fn read_line(path: &str) -> String {
+    read_lines(path).next().expect("No lines of input")
+}
+
 pub fn read_lines(path: &str) -> impl Iterator<Item = String> {
     let f = File::open(path).expect("Unable to read input file");
     let reader = BufReader::new(f);
