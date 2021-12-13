@@ -3,6 +3,7 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 pub mod grid;
+pub mod point;
 
 pub fn input_arg() -> String {
     env::args()
