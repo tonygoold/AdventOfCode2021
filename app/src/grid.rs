@@ -17,7 +17,8 @@ impl<T> Grid<T> {
     }
 
     pub fn enumerate<F>(&self, mut f: F)
-        where F: FnMut((usize, usize), &T),
+    where
+        F: FnMut((usize, usize), &T),
     {
         for y in 0..self.rows {
             let row = &self[y];
@@ -28,7 +29,8 @@ impl<T> Grid<T> {
     }
 
     pub fn map<F>(&self, mut f: F) -> Self
-        where F: FnMut((usize, usize), &T) -> T,
+    where
+        F: FnMut((usize, usize), &T) -> T,
     {
         let mut cells = Vec::with_capacity(self.cells.len());
         for y in 0..self.rows {
