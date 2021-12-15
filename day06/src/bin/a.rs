@@ -2,9 +2,7 @@ const NUM_DAYS: usize = 80;
 
 fn elapse_day(fish: &[usize; 9]) -> [usize; 9] {
     let mut result = [0; 9];
-    for i in 1..9 {
-        result[i - 1] = fish[i];
-    }
+    result[..8].clone_from_slice(&fish[1..]);
     result[6] += fish[0];
     result[8] = fish[0];
     result
