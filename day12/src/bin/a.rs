@@ -11,7 +11,10 @@ struct Graph {
 
 impl Graph {
     fn new() -> Self {
-        Graph { edges: HashMap::new(), empty: Vec::new() }
+        Graph {
+            edges: HashMap::new(),
+            empty: Vec::new(),
+        }
     }
 
     fn add_edge(&mut self, from: &str, to: &str) {
@@ -20,7 +23,9 @@ impl Graph {
     }
 
     fn out_nodes(&self, from: &str) -> impl Iterator<Item = &String> {
-        self.edges.get(from).map_or_else(|| self.empty.iter(), |v| v.iter())
+        self.edges
+            .get(from)
+            .map_or_else(|| self.empty.iter(), |v| v.iter())
     }
 }
 
@@ -33,7 +38,8 @@ fn all_paths(g: &Graph) -> Vec<Vec<String>> {
             paths.push(path);
             continue;
         }
-        let tails = g.out_nodes(head)
+        let tails = g
+            .out_nodes(head)
             .filter(|s| has_uppercase(s) || !path.contains(s));
         for tail in tails {
             let mut new_path = path.clone();

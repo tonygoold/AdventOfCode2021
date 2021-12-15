@@ -49,20 +49,17 @@ fn main() {
     }
 
     let map = char_map(&chain);
-    let minmax = map.iter().fold((' ', usize::MAX, ' ', usize::MIN), |acc, (k, v)| {
-        let min = if *v < acc.1 {
-            (*k, *v)
-        } else {
-            (acc.0, acc.1)
-        };
-        let max = if *v > acc.3 {
-            (*k, *v)
-        } else {
-            (acc.2, acc.3)
-        };
-        (min.0, min.1, max.0, max.1)
-    });
+    let minmax = map
+        .iter()
+        .fold((' ', usize::MAX, ' ', usize::MIN), |acc, (k, v)| {
+            let min = if *v < acc.1 { (*k, *v) } else { (acc.0, acc.1) };
+            let max = if *v > acc.3 { (*k, *v) } else { (acc.2, acc.3) };
+            (min.0, min.1, max.0, max.1)
+        });
     println!("The most frequent is '{}' at {}", minmax.2, minmax.3);
     println!("The least frequent is '{}' at {}", minmax.0, minmax.1);
-    println!("The difference between most and least frequent is {}", minmax.3 - minmax.1);
+    println!(
+        "The difference between most and least frequent is {}",
+        minmax.3 - minmax.1
+    );
 }

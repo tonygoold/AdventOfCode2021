@@ -31,7 +31,10 @@ struct Expansion {
 
 impl Expansion {
     fn new() -> Self {
-        Expansion { memory: HashMap::new(), rules: HashMap::new() }
+        Expansion {
+            memory: HashMap::new(),
+            rules: HashMap::new(),
+        }
     }
 
     fn add_rule(&mut self, k1: char, k2: char, v: char) {
@@ -59,7 +62,10 @@ impl Expansion {
             return count.clone();
         }
         let mut counts = CharCount::new();
-        let c = *self.rules.get(&(k1, k2)).expect("Missing rule for char pair");
+        let c = *self
+            .rules
+            .get(&(k1, k2))
+            .expect("Missing rule for char pair");
         counts.merge(&self.expand(k1, c, depth - 1));
         counts.merge(&self.expand(c, k2, depth - 1));
         let entry = counts.entry(c).or_default();
@@ -71,8 +77,14 @@ impl Expansion {
 
 fn parse_rule(s: &str) -> Result<(char, char, char), ParseRuleError> {
     let mut parts = s.split(" -> ");
-    let k: Vec<char> = parts.next().map(|s| s.chars().collect()).ok_or(ParseRuleError::InvalidSyntax)?;
-    let v: Vec<char> = parts.next().map(|s| s.chars().collect()).ok_or(ParseRuleError::InvalidSyntax)?;
+    let k: Vec<char> = parts
+        .next()
+        .map(|s| s.chars().collect())
+        .ok_or(ParseRuleError::InvalidSyntax)?;
+    let v: Vec<char> = parts
+        .next()
+        .map(|s| s.chars().collect())
+        .ok_or(ParseRuleError::InvalidSyntax)?;
     match (k.len(), v.len()) {
         (2, 1) => Ok((k[0], k[1], v[0])),
         (2, _) => Err(ParseRuleError::WrongSizeValue),
@@ -86,23 +98,22 @@ fn main() {
     lines.next(); // Consume blank separator
 
     let mut expansion = Expansion::new();
-    lines.map(|l| parse_rule(&l).unwrap()).for_each(|(k1, k2, v)| expansion.add_rule(k1, k2, v));
+    lines
+        .map(|l| parse_rule(&l).unwrap())
+        .for_each(|(k1, k2, v)| expansion.add_rule(k1, k2, v));
 
     let map = expansion.expand_str(&input, NUM_STEPS);
-    let minmax = map.iter().fold((' ', usize::MAX, ' ', usize::MIN), |acc, (k, v)| {
-        let min = if *v < acc.1 {
-            (*k, *v)
-        } else {
-            (acc.0, acc.1)
-        };
-        let max = if *v > acc.3 {
-            (*k, *v)
-        } else {
-            (acc.2, acc.3)
-        };
-        (min.0, min.1, max.0, max.1)
-    });
+    let minmax = map
+        .iter()
+        .fold((' ', usize::MAX, ' ', usize::MIN), |acc, (k, v)| {
+            let min = if *v < acc.1 { (*k, *v) } else { (acc.0, acc.1) };
+            let max = if *v > acc.3 { (*k, *v) } else { (acc.2, acc.3) };
+            (min.0, min.1, max.0, max.1)
+        });
     println!("The most frequent is '{}' at {}", minmax.2, minmax.3);
     println!("The least frequent is '{}' at {}", minmax.0, minmax.1);
-    println!("The difference between most and least frequent is {}", minmax.3 - minmax.1);
+    println!(
+        "The difference between most and least frequent is {}",
+        minmax.3 - minmax.1
+    );
 }
