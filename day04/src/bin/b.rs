@@ -71,7 +71,7 @@ impl BingoCard {
         for (j, line) in lines.iter().enumerate() {
             let ns = line
                 .split(' ')
-                .filter(|l| l.len() > 0)
+                .filter(|l| !l.is_empty())
                 .map(|l| l.parse::<u8>().expect("Invalid card value"));
             for (i, n) in ns.enumerate() {
                 card.set(i, j, n);

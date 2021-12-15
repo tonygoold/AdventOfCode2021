@@ -62,7 +62,7 @@ fn main() {
     let mut lines = app::read_lines(&app::input_arg());
     let mut points: HashSet<Point> = HashSet::new();
     for line in &mut lines {
-        if line == "" {
+        if line.is_empty() {
             break;
         }
         points.insert(line.parse::<Point>().unwrap());
