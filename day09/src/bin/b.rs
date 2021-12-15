@@ -109,7 +109,7 @@ fn main() {
         .iter()
         .map(|&(x, y)| grid.basin_size_at(x, y))
         .collect();
-    basin_sizes.sort();
+    basin_sizes.sort_unstable();
     let product: usize = basin_sizes.iter().rev().take(3).product();
     println!("The product of the three largest basins is {}", product);
 }

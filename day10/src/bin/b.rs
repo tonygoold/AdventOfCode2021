@@ -84,6 +84,6 @@ fn main() {
             scores.push(score);
         }
     }
-    scores.sort();
+    scores.sort_unstable();
     println!("The median score is {}", &scores[scores.len() / 2]);
 }
