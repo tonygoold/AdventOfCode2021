@@ -1,5 +1,3 @@
-use app;
-
 const NUM_DAYS: usize = 256;
 
 fn elapse_day(fish: &[usize; 9]) -> [usize; 9] {

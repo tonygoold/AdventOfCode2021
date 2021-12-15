@@ -1,4 +1,3 @@
-use app;
 use app::grid::Grid;
 
 const NUM_ITERS: usize = 100;

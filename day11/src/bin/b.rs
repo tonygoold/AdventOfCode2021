@@ -1,4 +1,3 @@
-use app;
 use app::grid::Grid;
 
 fn grid_incr(grid: &Grid<usize>) -> Grid<usize> {

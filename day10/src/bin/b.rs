@@ -1,5 +1,3 @@
-use app;
-
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum ChunkError {
     // The stack was empty

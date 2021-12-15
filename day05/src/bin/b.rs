@@ -3,8 +3,6 @@ use std::collections::HashMap;
 use std::num::ParseIntError;
 use std::str::FromStr;
 
-use app;
-
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum ParsePointError {
     WrongDimensions(usize),

@@ -1,7 +1,5 @@
 use std::collections::HashMap;
 
-use app;
-
 const NUM_STEPS: usize = 40;
 
 #[derive(Debug, Clone)]

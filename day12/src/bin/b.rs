@@ -1,7 +1,5 @@
 use std::collections::HashMap;
 
-use app;
-
 fn has_uppercase(s: &str) -> bool {
     s.chars().any(char::is_uppercase)
 }

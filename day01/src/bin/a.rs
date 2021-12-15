@@ -1,5 +1,3 @@
-use app;
-
 fn main() {
     let xs = app::read_uints(&app::input_arg());
     // Assumption: All values are positive, non-zero.

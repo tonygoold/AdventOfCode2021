@@ -1,7 +1,5 @@
 use std::collections::HashSet;
 
-use app;
-
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum ParseGridError {
     NoData,

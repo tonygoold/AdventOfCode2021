@@ -1,5 +1,3 @@
-use app;
-
 fn dist(a: usize, b: usize) -> usize {
     if a >= b {
         a - b

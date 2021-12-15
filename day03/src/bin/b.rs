@@ -1,5 +1,3 @@
-use app;
-
 // Returns (num_zeros, num_ones)
 fn col_bits<S: AsRef<str>>(rows: impl Iterator<Item = S>, col: usize) -> (usize, usize) {
     rows.fold((0, 0), |acc @ (zeros, ones), row| {

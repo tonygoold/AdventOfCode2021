@@ -1,7 +1,5 @@
 use regex::Regex;
 
-use app;
-
 enum Move {
     Forward(isize),
     Down(isize),

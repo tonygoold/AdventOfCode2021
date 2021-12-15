@@ -5,7 +5,6 @@ use std::str::FromStr;
 
 use regex::Regex;
 
-use app;
 use app::point::Point2D;
 
 type Point = Point2D<usize>;

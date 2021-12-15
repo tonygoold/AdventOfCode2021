@@ -1,7 +1,5 @@
 use std::str::FromStr;
 
-use app;
-
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum ParseSegmentError {
     InvalidChar(char),

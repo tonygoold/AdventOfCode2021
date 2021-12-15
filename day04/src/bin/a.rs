@@ -1,5 +1,3 @@
-use app;
-
 struct BingoCard {
     cells: [u8; 25],
     called: [bool; 25],

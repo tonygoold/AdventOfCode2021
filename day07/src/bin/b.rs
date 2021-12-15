@@ -1,5 +1,3 @@
-use app;
-
 fn dist(a: usize, b: usize) -> usize {
     let diff = if a >= b { a - b } else { b - a };
     diff * (diff + 1) / 2

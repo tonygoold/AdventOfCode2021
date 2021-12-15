@@ -1,7 +1,5 @@
 use std::collections::HashMap;
 
-use app;
-
 const NUM_STEPS: usize = 10;
 
 fn expand(s: &str, rules: &HashMap<String, String>) -> String {
