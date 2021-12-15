@@ -22,8 +22,8 @@ impl<T> Grid<T> {
     {
         for y in 0..self.rows {
             let row = &self[y];
-            for x in 0..self.cols {
-                f((x, y), &row[x]);
+            for (x, cell) in row.iter().enumerate().take(self.cols) {
+                f((x, y), cell);
             }
         }
     }
@@ -35,8 +35,8 @@ impl<T> Grid<T> {
         let mut cells = Vec::with_capacity(self.cells.len());
         for y in 0..self.rows {
             let row = &self[y];
-            for x in 0..self.cols {
-                cells.push(f((x, y), &row[x]));
+            for (x, cell) in row.iter().enumerate().take(self.cols) {
+                cells.push(f((x, y), cell));
             }
         }
         Self::new_with_cells(cells, self.rows, self.cols)

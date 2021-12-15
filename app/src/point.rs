@@ -15,19 +15,20 @@ pub struct Point2D<T> {
 
 impl<T> Point2D<T> {
     pub fn new(x: T, y: T) -> Self {
-        Self { x: x, y: y }
+        Self { x, y }
     }
 }
 
 impl<T> FromStr for Point2D<T>
-    where T: FromStr<Err = ParseIntError>,
+where
+    T: FromStr<Err = ParseIntError>,
 {
     type Err = ParsePointError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut ns = s
             .split(',')
-            .map(|n| n.parse::<T>().map_err(|e| Self::Err::BadCoord(e)));
+            .map(|n| n.parse::<T>().map_err(Self::Err::BadCoord));
         let x = ns.next().unwrap_or(Err(Self::Err::WrongDimensions(0)))?;
         let y = ns.next().unwrap_or(Err(Self::Err::WrongDimensions(1)))?;
         match ns.count() {

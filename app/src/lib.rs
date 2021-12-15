@@ -7,9 +7,8 @@ pub mod point;
 
 pub fn input_arg() -> String {
     env::args()
-        .skip(1)
-        .next()
-        .unwrap_or("input.txt".to_string())
+        .nth(1)
+        .unwrap_or_else(|| "input.txt".to_string())
 }
 
 pub fn read_line(path: &str) -> String {
@@ -26,6 +25,8 @@ pub fn read_lines(path: &str) -> impl Iterator<Item = String> {
 }
 
 pub fn read_uints(path: &str) -> impl Iterator<Item = usize> {
-    read_lines(path)
-        .map(|x| usize::from_str_radix(&x, 10).expect("Line was not an unsigned integer"))
+    read_lines(path).map(|x| {
+        x.parse::<usize>()
+            .expect("Line was not an unsigned integer")
+    })
 }
