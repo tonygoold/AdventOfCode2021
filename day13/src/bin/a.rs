@@ -29,7 +29,7 @@ where
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let re = Regex::new(r"^fold along (x|y)=(\d+)$").expect("Failed to compile regex");
         let caps = re.captures(s).ok_or(Self::Err::MatchError)?;
-        let val = caps[2].parse::<T>().map_err(|e| Self::Err::ParseError(e))?;
+        let val = caps[2].parse::<T>().map_err(Self::Err::ParseError)?;
         Ok(if &caps[1] == "x" {
             Fold::X(val)
         } else {

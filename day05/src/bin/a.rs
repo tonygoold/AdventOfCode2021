@@ -45,7 +45,7 @@ impl FromStr for Point {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut ns = s
             .split(',')
-            .map(|n| n.parse::<isize>().map_err(|e| Self::Err::BadCoord(e)));
+            .map(|n| n.parse::<isize>().map_err(Self::Err::BadCoord));
         let x = ns.next().unwrap_or(Err(Self::Err::WrongDimensions(0)))?;
         let y = ns.next().unwrap_or(Err(Self::Err::WrongDimensions(1)))?;
         match ns.count() {
@@ -101,7 +101,7 @@ impl FromStr for Segment {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut ps = s
             .split(" -> ")
-            .map(|p| p.parse::<Point>().map_err(|e| Self::Err::BadPoint(e)));
+            .map(|p| p.parse::<Point>().map_err(Self::Err::BadPoint));
         let p1 = ps.next().unwrap_or(Err(Self::Err::WrongNumPoints(0)))?;
         let p2 = ps.next().unwrap_or(Err(Self::Err::WrongNumPoints(1)))?;
         match ps.count() {
