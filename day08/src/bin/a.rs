@@ -18,7 +18,7 @@ struct SegmentSet {
 }
 
 struct Panel {
-    inputs: Vec<SegmentSet>,
+    _inputs: Vec<SegmentSet>,
     displays: [SegmentSet; 4],
 }
 
@@ -93,7 +93,7 @@ impl FromStr for Panel {
             return Err(Self::Err::WrongNumDisplays);
         }
         Ok(Panel {
-            inputs,
+            _inputs: inputs,
             displays: [outputs[0], outputs[1], outputs[2], outputs[3]],
         })
     }
