@@ -9,7 +9,7 @@ enum Move {
 use Move::{Down, Forward, Up};
 
 fn parse_move(dir: &str, val: &str) -> Option<Move> {
-    match isize::from_str_radix(val, 10) {
+    match val.parse::<isize>() {
         Err(_) => None,
         Ok(xy) => match dir {
             "forward" => Some(Forward(xy)),

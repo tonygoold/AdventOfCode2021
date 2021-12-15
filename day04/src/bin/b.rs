@@ -72,7 +72,7 @@ impl BingoCard {
             let ns = line
                 .split(' ')
                 .filter(|l| l.len() > 0)
-                .map(|l| u8::from_str_radix(l, 10).expect("Invalid card value"));
+                .map(|l| l.parse::<u8>().expect("Invalid card value"));
             for (i, n) in ns.enumerate() {
                 card.set(i, j, n);
             }
@@ -91,7 +91,7 @@ fn main() {
 
     let input: Vec<u8> = rows[0]
         .split(',')
-        .map(|l| u8::from_str_radix(l, 10).expect("Invalid input value"))
+        .map(|l| l.parse::<u8>().expect("Invalid input value"))
         .collect();
 
     let mut cards: Vec<BingoCard> = rows[1..]
