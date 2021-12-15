@@ -41,6 +41,14 @@ impl<T> Grid<T> {
         }
         Self::new_with_cells(cells, self.rows, self.cols)
     }
+
+    pub fn iter(&self) -> Iter<T> {
+        Iter {
+            grid: self,
+            x: 0,
+            y: 0,
+        }
+    }
 }
 
 impl<T> Index<usize> for Grid<T> {
@@ -66,5 +74,31 @@ impl<T: Default> Grid<T> {
         let mut cells = Vec::new();
         cells.resize_with(rows * cols, T::default);
         Grid { cells, rows, cols }
+    }
+}
+
+pub struct Iter<'a, T> {
+    grid: &'a Grid<T>,
+    x: usize,
+    y: usize,
+}
+
+impl<'a, T> Iterator for Iter<'a, T> {
+    type Item = (usize, usize, &'a T);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let (rows, cols) = self.grid.size();
+        let (x, y) = (self.x, self.y);
+        if y == rows {
+            return None;
+        }
+        let item = &self.grid[y][x];
+        if x + 1 < cols {
+            self.x += 1;
+        } else {
+            self.x = 0;
+            self.y += 1;
+        }
+        Some((x, y, item))
     }
 }
