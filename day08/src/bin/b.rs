@@ -117,15 +117,15 @@ impl Panel {
         let three = self
             .inputs
             .iter()
-            .find(|s| s.count() == 5 && s.intersect(&one).count() == 2)?;
+            .find(|s| s.count() == 5 && s.intersect(one).count() == 2)?;
         let six = self
             .inputs
             .iter()
-            .find(|s| s.count() == 6 && s.intersect(&one).count() == 1)?;
+            .find(|s| s.count() == 6 && s.intersect(one).count() == 1)?;
         let nine = self
             .inputs
             .iter()
-            .find(|s| s.count() == 6 && s.intersect(&three).count() == 5)?;
+            .find(|s| s.count() == 6 && s.intersect(three).count() == 5)?;
         let zero = self
             .inputs
             .iter()
@@ -133,7 +133,7 @@ impl Panel {
         let five = self
             .inputs
             .iter()
-            .find(|s| s.count() == 5 && s.intersect(&six).count() == 5)?;
+            .find(|s| s.count() == 5 && s.intersect(six).count() == 5)?;
         let two = self
             .inputs
             .iter()
