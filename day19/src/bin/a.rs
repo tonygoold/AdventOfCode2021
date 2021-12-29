@@ -1,6 +1,6 @@
-use std::collections::{VecDeque, HashSet};
+use std::collections::{HashSet, VecDeque};
 use std::num::ParseIntError;
-use std::ops::{Mul, Sub, Add};
+use std::ops::{Add, Mul, Sub};
 use std::str::FromStr;
 
 /*
@@ -24,7 +24,12 @@ struct Position {
 
 impl Position {
     fn in_range(&self) -> bool {
-        self.x >= -1000 && self.x <= 1000 && self.y >= -1000 && self.x <= 1000 && self.z >= -1000 && self.z <= 1000
+        self.x >= -1000
+            && self.x <= 1000
+            && self.y >= -1000
+            && self.x <= 1000
+            && self.z >= -1000
+            && self.z <= 1000
     }
 }
 
@@ -32,7 +37,11 @@ impl Add for Position {
     type Output = Self;
 
     fn add(self, rhs: Self) -> Self {
-        Position { x: self.x + rhs.x, y: self.y + rhs.y, z: self.z + rhs.z }
+        Position {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+            z: self.z + rhs.z,
+        }
     }
 }
 
@@ -40,7 +49,11 @@ impl Sub for Position {
     type Output = Self;
 
     fn sub(self, rhs: Self) -> Self {
-        Position { x: self.x - rhs.x, y: self.y - rhs.y, z: self.z - rhs.z }
+        Position {
+            x: self.x - rhs.x,
+            y: self.y - rhs.y,
+            z: self.z - rhs.z,
+        }
     }
 }
 
@@ -51,52 +64,27 @@ struct Transform {
 
 impl Transform {
     fn identity() -> Self {
-        let cells = [
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1,
-        ];
+        let cells = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
         Transform { cells }
     }
 
     fn rotate_x() -> Self {
-        let cells = [
-            1, 0, 0, 0,
-            0, 0,-1, 0,
-            0, 1, 0, 0,
-            0, 0, 0, 1,
-        ];
+        let cells = [1, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 1];
         Transform { cells }
     }
 
     fn rotate_y() -> Self {
-        let cells = [
-            0, 0, 1, 0,
-            0, 1, 0, 0,
-           -1, 0, 0, 0,
-            0, 0, 0, 1,
-        ];
+        let cells = [0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 1];
         Transform { cells }
     }
 
     fn rotate_z() -> Self {
-        let cells = [
-            0,-1, 0, 0,
-            1, 0, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1,
-        ];
+        let cells = [0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
         Transform { cells }
     }
 
     fn translate(x: isize, y: isize, z: isize) -> Self {
-        let cells = [
-            1, 0, 0, x,
-            0, 1, 0, y,
-            0, 0, 1, z,
-            0, 0, 0, 1,
-        ];
+        let cells = [1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z, 0, 0, 0, 1];
         Transform { cells }
     }
 }
@@ -108,11 +96,10 @@ impl Mul for Transform {
         let mut cells = [0; 16];
         for j in 0..4 {
             for i in 0..4 {
-                cells[j*4 + i]
-                    = self.cells[j*4 + 0] * other.cells[0*4 + i]
-                    + self.cells[j*4 + 1] * other.cells[1*4 + i]
-                    + self.cells[j*4 + 2] * other.cells[2*4 + i]
-                    + self.cells[j*4 + 3] * other.cells[3*4 + i];
+                cells[j * 4 + i] = self.cells[j * 4 + 0] * other.cells[0 * 4 + i]
+                    + self.cells[j * 4 + 1] * other.cells[1 * 4 + i]
+                    + self.cells[j * 4 + 2] * other.cells[2 * 4 + i]
+                    + self.cells[j * 4 + 3] * other.cells[3 * 4 + i];
             }
         }
         Transform { cells }
@@ -177,7 +164,14 @@ struct Alignment {
 
 impl Alignment {
     fn new() -> Self {
-        Alignment { rx: 0, ry: 0, rz: 0, tx: 0, ty: 0, tz: 0 }
+        Alignment {
+            rx: 0,
+            ry: 0,
+            rz: 0,
+            tx: 0,
+            ty: 0,
+            tz: 0,
+        }
     }
 
     fn transform(&self) -> Transform {
@@ -209,9 +203,23 @@ impl Alignment {
         result.reserve(24);
         for rx in 0..4 {
             for ry in 0..4 {
-                result.push(Alignment { rx, ry, rz: 0, tx: 0, ty: 0, tz: 0 });
+                result.push(Alignment {
+                    rx,
+                    ry,
+                    rz: 0,
+                    tx: 0,
+                    ty: 0,
+                    tz: 0,
+                });
                 if ry == 0 || ry == 2 {
-                    result.push(Alignment { rx, ry, rz: 1, tx: 0, ty: 0, tz: 0 });
+                    result.push(Alignment {
+                        rx,
+                        ry,
+                        rz: 1,
+                        tx: 0,
+                        ty: 0,
+                        tz: 0,
+                    });
                 }
             }
         }
@@ -229,13 +237,14 @@ impl FromStr for Position {
     type Err = ParsePositionError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let mut ns = s.split(',')
+        let mut ns = s
+            .split(',')
             .map(|n| n.parse::<isize>().map_err(|e| Self::Err::BadCoord(e)));
         let x = ns.next().unwrap_or(Err(Self::Err::WrongDimensions))?;
         let y = ns.next().unwrap_or(Err(Self::Err::WrongDimensions))?;
         let z = ns.next().unwrap_or(Err(Self::Err::WrongDimensions))?;
         if ns.next().is_some() {
-            return Err(Self::Err::WrongDimensions)
+            return Err(Self::Err::WrongDimensions);
         } else {
             Ok(Position { x, y, z })
         }
@@ -282,13 +291,12 @@ impl Scanner {
         If at least 12 translated beacons match up, then accept this as a solution.
         */
         let tx = orientation.transform();
-        let ps: Vec<Position> = scanner.beacons.iter()
-            .map(|p| tx * (*p))
-            .collect();
+        let ps: Vec<Position> = scanner.beacons.iter().map(|p| tx * (*p)).collect();
         for p1 in ps.iter() {
             for p2 in self.beacons.iter() {
                 let delta = *p2 - *p1;
-                let candidates = ps.iter()
+                let candidates = ps
+                    .iter()
                     .map(|&p| p + delta)
                     .filter(|p| self.beacons.contains(p));
                 if candidates.count() >= 12 {
@@ -342,7 +350,10 @@ mod test {
 
     #[test]
     fn id_by_id() {
-        assert_eq!(Transform::identity() * Transform::identity(), Transform::identity());
+        assert_eq!(
+            Transform::identity() * Transform::identity(),
+            Transform::identity()
+        );
     }
 
     #[test]
