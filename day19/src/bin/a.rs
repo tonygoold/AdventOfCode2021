@@ -22,17 +22,6 @@ struct Position {
     z: isize,
 }
 
-impl Position {
-    fn in_range(&self) -> bool {
-        self.x >= -1000
-            && self.x <= 1000
-            && self.y >= -1000
-            && self.x <= 1000
-            && self.z >= -1000
-            && self.z <= 1000
-    }
-}
-
 impl Add for Position {
     type Output = Self;
 
@@ -92,6 +81,7 @@ impl Transform {
 impl Mul for Transform {
     type Output = Self;
 
+    #[allow(clippy::identity_op, clippy::erasing_op)]
     fn mul(self, other: Self) -> Self {
         let mut cells = [0; 16];
         for j in 0..4 {
@@ -185,19 +175,6 @@ impl Alignment {
         trans
     }
 
-    fn transform_inv(&self) -> Transform {
-        let mut trans = if self.tx != 0 || self.ty != 0 || self.tz != 0 {
-            Transform::translate(-self.tx, -self.ty, -self.tz)
-        } else {
-            Transform::identity()
-        };
-        let (rx, ry, rz) = (4 - self.rx, 4 - self.ry, 4 - self.rz);
-        (0..rz).for_each(|_| trans = Transform::rotate_z() * trans);
-        (0..ry).for_each(|_| trans = Transform::rotate_y() * trans);
-        (0..rx).for_each(|_| trans = Transform::rotate_x() * trans);
-        trans
-    }
-
     fn orientations() -> Vec<Alignment> {
         let mut result = Vec::new();
         result.reserve(24);
@@ -239,12 +216,12 @@ impl FromStr for Position {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut ns = s
             .split(',')
-            .map(|n| n.parse::<isize>().map_err(|e| Self::Err::BadCoord(e)));
+            .map(|n| n.parse::<isize>().map_err(Self::Err::BadCoord));
         let x = ns.next().unwrap_or(Err(Self::Err::WrongDimensions))?;
         let y = ns.next().unwrap_or(Err(Self::Err::WrongDimensions))?;
         let z = ns.next().unwrap_or(Err(Self::Err::WrongDimensions))?;
         if ns.next().is_some() {
-            return Err(Self::Err::WrongDimensions);
+            Err(Self::Err::WrongDimensions)
         } else {
             Ok(Position { x, y, z })
         }
@@ -331,7 +308,7 @@ fn main() {
             let ps = scanner.beacons.iter().map(|p| tx * (*p));
             base.beacons.extend(ps);
             alignments.push((scanner, alignment));
-        } else if scanners.len() > 0 {
+        } else if !scanners.is_empty() {
             println!("Cannot align, returing to back of queue");
             scanners.push_back(scanner);
         } else {
@@ -340,49 +317,4 @@ fn main() {
     }
     println!("All scanners aligned!");
     println!("Found {} beacons", base.beacons.len());
-}
-
-#[cfg(test)]
-mod test {
-    use std::collections::HashSet;
-
-    use super::{Alignment, Transform};
-
-    #[test]
-    fn id_by_id() {
-        assert_eq!(
-            Transform::identity() * Transform::identity(),
-            Transform::identity()
-        );
-    }
-
-    #[test]
-    fn rotations_cycle() {
-        let rx = Transform::rotate_x();
-        let ry = Transform::rotate_y();
-        let rz = Transform::rotate_z();
-        assert_eq!(rx * rx * rx * rx, Transform::identity());
-        assert_eq!(ry * ry * ry * ry, Transform::identity());
-        assert_eq!(rz * rz * rz * rz, Transform::identity());
-    }
-
-    #[test]
-    fn orientations_are_unique() {
-        let alignments = Alignment::orientations();
-        let mut txs = HashSet::new();
-        txs.extend(alignments.iter().map(|a| a.transform()));
-        assert_eq!(alignments.len(), 24);
-        assert_eq!(alignments.len(), txs.len());
-    }
-
-    #[test]
-    fn inverses_are_correct() {
-        let id = Transform::identity();
-        for alignment in Alignment::orientations() {
-            let tx = alignment.transform() * alignment.transform_inv();
-            assert_eq!(tx, id);
-            let tx = alignment.transform_inv() * alignment.transform();
-            assert_eq!(tx, id);
-        }
-    }
 }

@@ -1,3 +1,6 @@
+use std::cmp::Ordering;
+use std::fmt;
+
 #[derive(Debug, Clone, Copy)]
 enum Node {
     Leaf(u8),
@@ -42,20 +45,6 @@ impl<'a> NodeRef<'a> {
         }
     }
 
-    fn to_string(&self) -> String {
-        match self.node() {
-            Node::Empty => String::new(),
-            Node::Leaf(value) => value.to_string(),
-            Node::Branch => {
-                String::from("[")
-                    + &self.left().map_or_else(String::new, |l| l.to_string())
-                    + ","
-                    + &self.right().map_or_else(String::new, |r| r.to_string())
-                    + "]"
-            }
-        }
-    }
-
     fn magnitude(&self) -> usize {
         match self.node() {
             Node::Empty => panic!("Cannot get magnitude of empty node"),
@@ -64,6 +53,26 @@ impl<'a> NodeRef<'a> {
                 let l = self.left().expect("Branch must have left child");
                 let r = self.right().expect("Branch must have right child");
                 3 * l.magnitude() + 2 * r.magnitude()
+            }
+        }
+    }
+}
+
+impl<'a> fmt::Display for NodeRef<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self.node() {
+            Node::Empty => Ok(()),
+            Node::Leaf(n) => write!(f, "{}", n),
+            Node::Branch => {
+                write!(f, "[")?;
+                if let Some(left) = self.left() {
+                    left.fmt(f)?;
+                }
+                write!(f, ",")?;
+                if let Some(right) = self.right() {
+                    right.fmt(f)?;
+                }
+                write!(f, "]")
             }
         }
     }
@@ -98,10 +107,10 @@ impl VecTree {
     }
 
     fn magnitude(&self) -> usize {
-        if self.values.len() > 0 {
-            self.root_ref().magnitude()
-        } else {
+        if self.values.is_empty() {
             0
+        } else {
+            self.root_ref().magnitude()
         }
     }
 
@@ -110,10 +119,6 @@ impl VecTree {
             tree: self,
             index: 0,
         }
-    }
-
-    fn to_string(&self) -> String {
-        self.root_ref().to_string()
     }
 
     fn iter(&self) -> TreeIter {
@@ -206,19 +211,16 @@ impl VecTree {
         let height = self.height();
         // A "pair nested inside four pairs" means we're looking for a branch node at the
         // fifth rank, which implies leaf nodes at the sixth rank.
-        if height < 6 {
-            return false;
-        } else if height > 6 {
-            panic!("Tree should never reach height of {}", height);
+        match height.cmp(&6) {
+            Ordering::Less => return false,
+            Ordering::Greater => panic!("Tree should never reach height of {}", height),
+            _ => {}
         }
         // Stop at the first branch node
         for index in 15..31 {
-            match &self.values[index] {
-                Node::Branch => {
-                    self.explode_node(index);
-                    return true;
-                }
-                _ => {}
+            if let Node::Branch = &self.values[index] {
+                self.explode_node(index);
+                return true;
             }
         }
         false
@@ -293,6 +295,12 @@ impl VecTree {
         };
         self.insert_value(index * 2 + 1, left_value);
         self.insert_value(index * 2 + 2, right_value);
+    }
+}
+
+impl fmt::Display for VecTree {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.root_ref().fmt(f)
     }
 }
 

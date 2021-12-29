@@ -32,7 +32,7 @@ struct Solution {
 impl Solution {
     fn pos_x(&self) -> isize {
         let (xvel, steps) = (self.xvel, self.steps);
-        if xvel <= steps - 1 {
+        if xvel < steps {
             xvel * (xvel + 1) / 2
         } else {
             xvel * steps - (steps - 1) * steps / 2
